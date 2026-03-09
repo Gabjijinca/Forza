@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:15
+    container_name: forza-db
+    restart: always
+    environment:
+      POSTGRES_DB: forza
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - forza-db-data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: forza-app
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/forza
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS}
+      - DB_EMA=${DB_EMA}
+      - DB_MAIL_PASS=${DB_MAIL_PASS}
+      - TK_SECRET=${TK_SECRET}
+      - EMAIL_SIN=${EMAIL_SIN}
+      - SENHA_SIN=${SENHA_SIN}
+      - CLI_ID=${CLI_ID}
+      - CLI_SECRET=${CLI_SECRET}
+      - GIT_ID=${GIT_ID}
+      - GIT_SECRET=${GIT_SECRET}
+
+volumes:
+  forza-db-data:
