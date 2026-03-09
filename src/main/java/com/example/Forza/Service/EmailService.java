@@ -32,6 +32,18 @@ private final JavaMailSender MailSender;
         MailSender.send(message);
     }
 
+    public void sendPasswordResetCode(String email, String code) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("Forza <seu-email-configurado@gmail.com>"); // Nome que aparece no e-mail
+        message.setTo(email);
+        message.setSubject("Recuperação de Senha - Forza");
+        message.setText("Olá! Você solicitou a recuperação de senha.\n\n" +
+                "Seu código de verificação é: " + code + "\n" +
+                "Este código expira em 15 minutos.");
+
+        MailSender.send(message);
+    }
+
 
 
 

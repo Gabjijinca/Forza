@@ -2,6 +2,7 @@ package com.example.Forza.Service;
 
 import com.example.Forza.Entity.User;
 import com.example.Forza.Reposit.UserRepository;
+import com.example.Forza.Roles.AuthProvider;
 import com.example.Forza.Roles.UserRole;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -26,12 +27,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        String clientName = userRequest.getClientRegistration().getRegistrationId();
+
         String email = oAuth2User.getAttribute("email");
 
         if (email == null) {
             email = oAuth2User.getAttribute("login") + "@github.com";
         }
-
 
         Optional<User> userOptional = userRepository.findByEmail(email);
 
@@ -42,15 +44,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             newUser.setUserRole(UserRole.USER);
             newUser.setEnabled(true);
 
+            if ("google".equalsIgnoreCase(clientName)) {
+                newUser.setProvider(AuthProvider.GOOGLE);
+            } else if ("github".equalsIgnoreCase(clientName)) {
+                newUser.setProvider(AuthProvider.GITHUB);
+            }
+
             userRepository.save(newUser);
-            System.out.println("Novo usuário do Google cadastrado: " + email);
+            System.out.println("Novo usuário via " + clientName + " cadastrado: " + email);
         } else {
-            System.out.println("Usuário do Google já existe, apenas logando: " + email);
+            System.out.println("Usuário já existe, logando via: " + clientName);
         }
 
         return oAuth2User;
     }
-
-
 
 }

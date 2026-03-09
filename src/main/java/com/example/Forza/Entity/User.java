@@ -1,5 +1,6 @@
 package com.example.Forza.Entity;
 
+import com.example.Forza.Roles.AuthProvider;
 import com.example.Forza.Roles.UserRole;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +38,18 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+
+    public AuthProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(AuthProvider provider) {
+        this.provider = provider;
+    }
 
     public UserRole getUserRole() {
         return userRole;
