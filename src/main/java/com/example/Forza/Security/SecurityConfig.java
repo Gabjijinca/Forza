@@ -40,11 +40,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // --- ROTAS PÚBLICAS (AUTH) ---
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/verify").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/forgot-password").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/reset-password").permitAll()
                         .requestMatchers("/auth/success").permitAll()
                         .requestMatchers("/login/**", "/oauth2/**").permitAll()
 

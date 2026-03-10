@@ -52,7 +52,7 @@ public class UserService {
 
         User savedUser = repository.save(newUser);
 
-        emailService.SentVerificationCode(savedUser.getEmail(), code);
+        emailService.sendEmail(savedUser.getEmail(), code);
 
         return savedUser;
     }
